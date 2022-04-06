@@ -46,12 +46,15 @@ In SQLite, I created a database called Sales.db. Next, I made three tables withi
 Once I contained a single csv file with the data I required, I read the data into Python as a dataframe. To ensure replicability of the results and to be able to compare the results later, I set the sample seed at 1234. Then I familiarized myself starting by generating summary statistics for our dataset using its function attributes:
 
 - dataset.info() - visualized our datatypes from each of the variables from our dataset. Containing 9999 entries, 10 columns, and data types of integers and floats.
-- ﻿dataset.describe() – gave us descriptive statistics summary on each variable from our dataset containing statistical measures of the count, mean, std, min, max, and percentiles of 25-50-75%.
+- dataset.describe() – gave us descriptive statistics summary on each variable from our dataset containing statistical measures of the count, mean, std, min, max, and percentiles of 25-50-75%.
 
 With the visual packages python provides we can use histograms, a correlation matrix, and scatter plots to see correlation between variables. More specifically I wanted to see how our feature/predictor variables are correlated with our target variable, price. For instance, in Figure 1 below, we can see how all the predictor variables are shaped with respect to price. In Figure 2 below, we can see the correlation represented as a value between (+/-) 1, where positive one shows the highest positive correlation, negative one shows the highest negative correlation, and zero representing no correlation.
 
+![Original Variable Scatter Plots](https://user-images.githubusercontent.com/77422313/162085570-20bb0e01-cfc7-4256-91f8-d5a25c26c2bf.png)
+Figure 1 - Scatter Plot
 
-
+![Original Variable Correlation Heat Map](https://user-images.githubusercontent.com/77422313/162085583-d7b8c6dc-03b3-4d15-903b-92c30b7564be.png)
+Figure 2 - Correlation Heat Map
 
 
 
@@ -87,6 +90,7 @@ We used ratio calculated variables strictly to avoid the multicollinearity probl
 For supervised machine learning problems, there are some tools used to prevent/minimize overfitting. For example, with linear regression, we usually fit the model on a training set to make predictions for the test set (the data that wasn’t trained). To further break this down, I split the data into two subsets: training and testing data to help make predictions on the test set. I do this using the “Scikit-Learn Library” and I use a 90/10 split meaning 90% of the data is used to train to make predictions for our test set, the 10% section. The only problem from only using the train-test split is if it wasn’t random and our subsets have certain data that the other subsets don’t. This could lead to overfitting, so I solve this problem by including k-folds cross validation. As shown in figure 3 below, it basically splits the data into k different folds and trains on k – 1 of those folds holding the last fold for test data. It then averages the model against all the folds and then creates a final-best model. 
 
 
+![image](https://user-images.githubusercontent.com/77422313/162085770-a4c00218-600b-4770-b28b-1bb83ddab09f.png)
 *Figure 3 - K-Folds CV*
 
 
@@ -94,6 +98,55 @@ For supervised machine learning problems, there are some tools used to prevent/m
 
 
 For only our linear regression models I used three different methods including scaling, a combinations function, and a polynomial features function. I scaled the data to standardize the variables for polynomial or interaction terms used, to avoid multicollinearity. A combination’s function was implemented to try all possible combinations of feature variables to find the best and lowest MSE score. To find the best model for regression I used sklearn’s “Polynomial Features” function which creates an interaction between the feature variables as well as raises each variable to the selected power, in my case 3. We set our Polynomial function to raise the variables to the 2nd with respect to the combinations function.
+
+```js
+{
+  x_scaled = preprocessing.scale(x)
+  x_scaled = pd.DataFrame(x_scaled, columns=('home_size', 'parcel_size', 'beds',\
+              'age', 'pool', 'year', 'cbd_dist', 'E_stateplane', 'N_stateplane',\
+                  'lattitude', 'longitutde', 'zipcode', 'land_to_building',\
+                      'cbdDist_to_landBuilding'))
+
+
+  scaled_Dataset = np.transpose(x_scaled)
+  scaled_Dataset = add_constant(x_scaled)
+
+
+  x_combos = []
+  for n in range(1,7):
+      combos = combinations(['home_size', 'parcel_size', 'beds', 'age', 'pool', 'year', \
+                   'cbd_dist', 'E_stateplane', 'N_stateplane', 'lattitude', 'longitutde', \
+                       'zipcode', 'land_to_building', 'cbdDist_to_landBuilding'], n)
+      x_combos.extend(combos)
+
+  # Create dictionary to store the variable combinations and associated average
+  # (over folds) test mse values
+  ols_mse = {}
+  lasso_mse = {}
+  ridge_mse = {}
+
+  # Initalize the k-fold cross validation.
+  k = KFold(n_splits = 10, shuffle=True, random_state=10)
+
+  # Runtime is around 30mins
+  for n in range(0, len(x_combos)):
+      combo_list = list(x_combos[n])
+      x2 = scaled_Dataset[combo_list]
+
+      poly = PolynomialFeatures(3)
+      poly_x = poly.fit_transform(x2)
+
+
+      ols_cv_scores = cross_validate(LinearRegression(), poly_x, Y, cv=k, scoring=('neg_mean_squared_error'))
+      lasso_cv_scores = cross_validate(Lasso(alpha=5.00), poly_x, Y, cv=k, scoring=('neg_mean_squared_error'))
+      ridge_cv_scores = cross_validate(Ridge(alpha=5.75), poly_x, Y, cv=k, scoring=('neg_mean_squared_error'))
+
+      ols_mse[str(combo_list)] = np.mean(ols_cv_scores['test_score'])
+      lasso_mse[str(combo_list)] = np.mean(lasso_cv_scores['test_score'])
+      ridge_mse[str(combo_list)] = np.mean(ridge_cv_scores['test_score'])
+},
+```
+
 
 
 ### A. Ordinary Least Squares – Linear
@@ -202,6 +255,11 @@ Table 1 - MSE and R2 for the best model
 
 After using three regression algorithms to predict the house price, the model obtained by XGBoost proved to have been the best model. With a large dataset, XGBoost was suitable as it was able to create an ensemble of decision trees using the various features to best predict the house prices. To further show XGBoost’s performance, I included some visualizations below that show feature importance, predicted vs. actual data plots, and the decision tree on features.
 
+![image](https://user-images.githubusercontent.com/77422313/162086076-c0913f06-e129-4e64-b9a5-da4d8782d7c6.png)
+
+![image](https://user-images.githubusercontent.com/77422313/162086096-41426627-a1b3-47d1-a6e9-023efa66d237.png)
+
+![image](https://user-images.githubusercontent.com/77422313/162086124-f29f96d7-025f-47c2-bdc5-b026cd6d04ed.png)
 
 
 
