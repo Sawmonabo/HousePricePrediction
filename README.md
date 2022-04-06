@@ -240,9 +240,9 @@ We also used a randomized search cross validation pre-built function from the sk
 
 
 
-## Validation of Models
+## Validation of Best Model
 
-Given a validation set we were able to re-estimate and fit our models on the original data set and obtain predictions for the validation set.
+Given a validation set we were able to re-estimate and fit the best model on the original data set and obtain predictions for the validation set.
 
 ||**Linear - OLS Regression**|**Lasso Regression**|**Ridge Regression**|**XGBoost**|
 | :-: | :-: | :-: | :-: | :-: |
