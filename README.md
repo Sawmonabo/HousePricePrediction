@@ -1,6 +1,6 @@
 # HousePricePrediction
 
-[Research Report .docx](https://github.com/Sawmonabo/HousePricePrediction/files/8430904/Research.Report.docx)
+[housePredictionsReport.pdf](https://github.com/Sawmonabo/HousePricePrediction/files/8433441/housePredictionsReport.pdf)
 
 
 **HOUSE PRICE PREDICTION USING MACHINE LEARNING TECHNIQUES**
