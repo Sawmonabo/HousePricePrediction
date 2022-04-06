@@ -9,7 +9,7 @@ Prepared by: Sawmon Abossedgh
 
 
 
-**Contents**
+## Contents
 
 1. Introduction
 1. Data Preparation and Description Using SQLite
@@ -29,19 +29,19 @@ Prepared by: Sawmon Abossedgh
 
 
 
-**Introduction**
+## Introduction
 
 The purpose of this project is to research and apply the various machine learning regression algorithms to undertake different models with training and testing process to identify a hedonic property price model that can be used to predict residential property prices in Orlando as a function of the physical and locational attributes of the properties. The data is first preprocessed and is then analyzed to summarize the main characteristics of the variables such as their correlation or any observable patterns. These variables are then fed into the different machine learning regression algorithms with the data being split into training and testing sets to estimate a model to predict house prices accurately. The best model will be identified by the measure of MSE (mean squared error) and its accuracy to the validation set. 
 
 
-**Data Preparation and Description Using SQLite**
+## Data Preparation and Description Using SQLite
 
 We are given files with the names prices.csv, characteristics.csv, and locations.csv. The files contain information on 10,000 residential property sales in Orange County, Florida. The first file contains a property identifier (pid), the most recent sales price of the property measured in thousands of dollars (price), and the year that the sale occurred (year). The second file contains a property identifier (pid), property-type code (tid), and numerous property characteristics. The property characteristics include the square feet of heated area (home\_size), the square feet of the parcel of land (parcel\_size), the number of bedrooms (beds), the age of the home in years (age), and an indicator variable (pool) that takes a value of 1 if the property has a pool and a value of 0 if it does not. The third file contains a property-type code (tid), a variable indicating the distance in meters to the central business district in downtown Orlando (cbd\_dist), and coordinates identifying the geographic location of each property (x\_coord and y\_coord). 
 
 In SQLite, I created a database called Sales.db. Next, I made three tables within the database called Prices, Characteristics, and Locations and populated the tables with the data contained in the prices.csv, characteristics.csv, and locations.csv files. Once all data is uploaded into SQLite, I then joined the tables and exported a single file called sales.csv that contains the sale prices and dates from the Prices table, the property characteristics from the Characteristics table, and the location variables from the Locations table. 
 
 
-**Reading and Visualizing the Dataset on Python.**
+## Reading and Visualizing the Dataset on Python
 
 Once I contained a single csv file with the data I required, I read the data into Python as a dataframe. To ensure replicability of the results and to be able to compare the results later, I set the sample seed at 1234. Then I familiarized myself starting by generating summary statistics for our dataset using its function attributes:
 
@@ -62,8 +62,8 @@ With the visual packages python provides we can use histograms, a correlation ma
 
 From our heat map in Figure 2, we can see there are many correlated variables. We notice that variables ‘home\_size’ to ‘beds’ have the highest positive correlation, and ‘age’ to ‘cbd\_dist’ have the highest negative correlation which from a practical standpoint makes sense. Most importantly, we need to see the correlation between the predictor variables and our target, price. Looking at the first column of our heat map in Figure 2, we see ‘home\_size’ being the highest positive correlation.
 
+## Feature Engineering
 
-**Feature Engineering**
 
 Before I started making new variables I reverse engineered the variables ‘(x/y)\_coord’ and learned that they are Florida East state plane measures in US Survey units. This isn’t a common measure for location, so we converted them into longitude and latitude. From there, we were able to use a function using our latitude and longitude that gave us data on each home. We were then able to obtain the address and zip code of each individual house from the dataset. There were 29 rows that the function didn’t return a zip code for, so we removed those columns completely to stay consistent with the rest of the data rows. This is all shown in python script – house\_features.py.
 
@@ -76,7 +76,7 @@ Now, after our previous section we learned about some features with high positiv
 We used ratio calculated variables strictly to avoid the multicollinearity problem when used in mainly linear regression models. A pre-defined method function in python called Variance Inflation Factor can also be used to determine the strength of the correlation between various independent models. If our variables from our features are less than a VIF score of 10, it can be used.
 
 
-**Train and Test Split w/ K-Folds Cross Validation**
+## Train and Test Split w/ K-Folds Cross Validation
 
 For supervised machine learning problems, there are some tools used to prevent/minimize overfitting. For example, with linear regression, we usually fit the model on a training set to make predictions for the test set (the data that wasn’t trained). To further break this down, I split the data into two subsets: training and testing data to help make predictions on the test set. I do this using the “Scikit-Learn Library” and I use a 90/10 split meaning 90% of the data is used to train to make predictions for our test set, the 10% section. The only problem from only using the train-test split is if it wasn’t random and our subsets have certain data that the other subsets don’t. This could lead to overfitting, so I solve this problem by including k-folds cross validation. As shown in figure 3 below, it basically splits the data into k different folds and trains on k – 1 of those folds holding the last fold for test data. It then averages the model against all the folds and then creates a final-best model. 
 
@@ -84,7 +84,8 @@ For supervised machine learning problems, there are some tools used to prevent/m
 *Figure 3 - K-Folds CV*
 
 
-**Regression Model Implementations**
+## Regression Model Implementations
+
 
 For only our linear regression models I used three different methods including scaling, a combinations function, and a polynomial features function. I scaled the data to standardize the variables for polynomial or interaction terms used, to avoid multicollinearity. A combination’s function was implemented to try all possible combinations of feature variables to find the best and lowest MSE score. To find the best model for regression I used sklearn’s “Polynomial Features” function which creates an interaction between the feature variables as well as raises each variable to the selected power, in my case 3. We set our Polynomial function to raise the variables to the 2nd with respect to the combinations function.
 
@@ -133,7 +134,7 @@ We also used a randomized search cross validation pre-built function from the sk
 
 
 
-**Validation of Models**
+## Validation of Models
 
 Given a validation set we were able to re-estimate and fit our models on the original data set and obtain predictions for the validation set.
 
@@ -142,33 +143,16 @@ Given a validation set we were able to re-estimate and fit our models on the ori
 |**Test Set**|<p>MSE = ﻿ 7312.977</p><p></p>|<p>MSE = ﻿9191.795</p><p></p>|<p>MSE = ﻿7647.505</p><p></p>|<p>MSE = 2279.02</p><p>R2 = ﻿86.38%</p>|
 |**Validation Set**||||<p>MSE = ﻿2499.51</p><p>R2 = 84.02%</p>|
 
-*Table 1 - MSE and* R2* for the best model
+*Table 1 - MSE and R2 for the best model
 
-**Conclusion**
+## Conclusion
 
 After using three regression algorithms to predict the house price, the model obtained by XGBoost proved to have been the best model. With a large dataset, XGBoost was suitable as it was able to create an ensemble of decision trees using the various features to best predict the house prices. To further show XGBoost’s performance, I included some visualizations below that show feature importance, predicted vs. actual data plots, and the decision tree on features.
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-**Citations**
+## Citations
 
 Lee, Wei-Meng. “Statistics in Python - Collinearity and Multicollinearity.” *Medium*, Towards Data Science, 11 Dec. 2021, <https://towardsdatascience.com/statistics-in-python-collinearity-and-multicollinearity-4cc4dcd82b3f#:~:text=VIF%20allows%20you%20to%20determine,linear%20dependencies%20with%20other%20predictors>. 
 
