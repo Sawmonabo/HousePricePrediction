@@ -90,28 +90,28 @@ For supervised machine learning problems, there are some tools used to prevent/m
 For only our linear regression models I used three different methods including scaling, a combinations function, and a polynomial features function. I scaled the data to standardize the variables for polynomial or interaction terms used, to avoid multicollinearity. A combination’s function was implemented to try all possible combinations of feature variables to find the best and lowest MSE score. To find the best model for regression I used sklearn’s “Polynomial Features” function which creates an interaction between the feature variables as well as raises each variable to the selected power, in my case 3. We set our Polynomial function to raise the variables to the 2nd with respect to the combinations function.
 
 
-*A.*    *Ordinary Least Squares – Linear*
+### A. Ordinary Least Squares – Linear
 
 From the scikit-learn website, we can verify OLS is used as the regression method. It also states the function definition as follows: Linear Regression fits a linear model with coefficients w = (w1, …, wp) to minimize the residual sum of squares between the observed targets in the dataset, and the targets predicted by the linear approximation.
 
 Using “﻿neg\_mean\_squared\_error” as our scoring, the model with the lowest MSE consisted of the variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'longitutde', 'cbdDist\_to\_landBuilding'. The test mean squared error for our best linear regression model was ﻿7312.977.
 
 
-*B.*	*Lasso* 
+### B. Lasso
 
 Least Absolute Shrinkage and Selection Operator (LASSO) is a machine learning regression algorithm that is quite like linear regression except it does have the capabilities to shrink the coefficients to zero to avoid overfitting. From the scikit-learn website, Lasso’s ability to regularize and shrink the coefficients allows it to be used for variable selection which in turn improves the prediction accuracy. To control for shrinkage applied to the coefficients to get a more parsimonious model, Lasso uses a tuning parameter, λ.  If λ=0, it is equal to the linear regression model, and as λ increases, the coefficients shrink and the ones that are equal zero are eliminated. 
 
 Using λ = 0.15 and “﻿neg\_mean\_squared\_error” as our scoring, we observe that the best model for Lasso is worse than our linear regression model, with an MSE of ﻿9191.795 and variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'lattitude', 'cbdDist\_to\_landBuilding'.  The lambda value was set close to zero which is why the two models look similar, showing a lack of shrinkage possibly. 
 
 
-*C.*	*Ridge* 
+### C. Ridge
 
 Ridge regression addresses some of the problems of Ordinary Least Squares by imposing a penalty on the size of the coefficients. From the scikit-learn website, the ridge coefficients minimize a penalized residual sum of squares, and the complexity parameter (α >= 0) controls the amount of shrinkage. The larger the value of the complexity parameter, the greater the amount of shrinkage and thus the coefficients become more robust to collinearity.
 
 Using α = 10 and “﻿neg\_mean\_squared\_error” as our scoring, we observe that the best model for Ridge is slightly worse than our linear regression model, with an MSE of ﻿7647.505 and variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'N\_stateplane', 'cbdDist\_to\_landBuilding'
 
 
-*D.*    *XGradient Boosting*
+## D. XGradient Boosting
 
 XGradient Boosting is a machine learning regression algorithm that is a method of creating an ensemble of individual models and is used for regression and classification purposes. In order to understand this method, I read an article by Arthur Mello called XGBoost: theory and practice. An understanding of decision trees is necessary. Decision trees are simply a way of visualizing outcomes in a branching structure. A decision tree consists of a root node, it represents the population that is being analyzed and is further branched out into the various features known as the decision nodes, which split into further nodes. Additionally, the leaf node is a sub-node that does not split into further nodes. XGradient boosting is a technique that creates an ensemble of decision trees, with each decision tree improving on the performance of the previous one. It is known to combine the weak learners into stronger ones, meaning that each new tree that is built improves on the error of the previous one. XGradient Boosting also uses hyperparameter tuning which chooses a set of optimal parameters for learning algorithms and provides us with high performance models. 
 
