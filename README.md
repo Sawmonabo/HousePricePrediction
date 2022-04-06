@@ -50,11 +50,16 @@ Prepared by: Sawmon Abossedgh
 
 <p>With the visual packages python provides we can use histograms, a correlation matrix, and scatter plots to see correlation between variables. More specifically I wanted to see how our feature/predictor variables are correlated with our target variable, price. For instance, in Figure 1 below, we can see how all the predictor variables are shaped with respect to price. In Figure 2 below, we can see the correlation represented as a value between (+/-) 1, where positive one shows the highest positive correlation, negative one shows the highest negative correlation, and zero representing no correlation.
 
-![Original Variable Scatter Plots](https://user-images.githubusercontent.com/77422313/162085570-20bb0e01-cfc7-4256-91f8-d5a25c26c2bf.png)
-Figure 1 - Scatter Plot
 
-![Original Variable Correlation Heat Map](https://user-images.githubusercontent.com/77422313/162085583-d7b8c6dc-03b3-4d15-903b-92c30b7564be.png)
-Figure 2 - Correlation Heat Map*
+
+| ![Original Variable Scatter Plots](https://user-images.githubusercontent.com/77422313/162085570-20bb0e01-cfc7-4256-91f8-d5a25c26c2bf.png) | 
+|:--:| 
+| *Figure 1 - Scatter Plot* |
+
+| ![Original Variable Correlation Heat Map](https://user-images.githubusercontent.com/77422313/162085583-d7b8c6dc-03b3-4d15-903b-92c30b7564be.png) |
+|:--:| 
+| *Figure 2 - Correlation Heat Map* |
+
 
 <p>From our heat map in Figure 2, we can see there are many correlated variables. We notice that variables ‘home\_size’ to ‘beds’ have the highest positive correlation, and ‘age’ to ‘cbd\_dist’ have the highest negative correlation which from a practical standpoint makes sense. Most importantly, we need to see the correlation between the predictor variables and our target, price. Looking at the first column of our heat map in Figure 2, we see ‘home\_size’ being the highest positive correlation.
 
@@ -83,10 +88,12 @@ Figure 2 - Correlation Heat Map*
 <p>For supervised machine learning problems, there are some tools used to prevent/minimize overfitting. For example, with linear regression, we usually fit the model on a training set to make predictions for the test set (the data that wasn’t trained). To further break this down, I split the data into two subsets: training and testing data to help make predictions on the test set. I do this using the “Scikit-Learn Library” and I use a 90/10 split meaning 90% of the data is used to train to make predictions for our test set, the 10% section. The only problem from only using the train-test split is if it wasn’t random and our subsets have certain data that the other subsets don’t. This could lead to overfitting, so I solve this problem by including k-folds cross validation. As shown in figure 3 below, it basically splits the data into k different folds and trains on k – 1 of those folds holding the last fold for test data. It then averages the model against all the folds and then creates a final-best model. 
 
 
-![image](https://user-images.githubusercontent.com/77422313/162085770-a4c00218-600b-4770-b28b-1bb83ddab09f.png)
-*Figure 3 - K-Folds CV*
 
+| ![image](https://user-images.githubusercontent.com/77422313/162085770-a4c00218-600b-4770-b28b-1bb83ddab09f.png) | 
+|:--:| 
+| *Figure 3 - K-Folds CV* |
 
+  
 ## Regression Model Implementations
 
 
