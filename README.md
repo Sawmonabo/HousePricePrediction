@@ -69,9 +69,15 @@ Before I started making new variables I reverse engineered the variables ‘(x/y
 
 Now, after our previous section we learned about some features with high positive correlation we can use to engineer a new variable to help predict price.  The variables are shown below:
 
-1. ﻿ dataset ['land\_to\_building'] = dataset ['parcel\_size'] / dataset ['home\_size'] 
-1. dataset ['cbdDist\_to\_landBuilding'] = dataset ['cbd\_dist'] / dataset ['land\_to\_building']
-1. dataset ['homesize\_to\_beds'] = dataset ['home\_size'] / dataset ['beds']
+
+
+```js
+{
+  dataset ['land\_to\_building'] = dataset ['parcel\_size'] / dataset ['home\_size'] 
+  dataset ['cbdDist\_to\_landBuilding'] = dataset ['cbd\_dist'] / dataset ['land\_to\_building']
+  dataset ['homesize\_to\_beds'] = dataset ['home\_size'] / dataset ['beds']
+},
+```
 
 We used ratio calculated variables strictly to avoid the multicollinearity problem when used in mainly linear regression models. A pre-defined method function in python called Variance Inflation Factor can also be used to determine the strength of the correlation between various independent models. If our variables from our features are less than a VIF score of 10, it can be used.
 
@@ -129,6 +135,53 @@ Parameters used and their meanings: (https://xgboost.readthedocs.io/en/stable/pa
 |gamma [default=0, alias: min\_split\_loss]|Minimum loss reduction required to make a further partition on a leaf node of the tree. The larger gamma is, the more conservative the algorithm will be.|
 
 
+```js
+{
+
+  parameters = \
+  {
+  "max_depth": [4, 5, 6],
+  "min_child_weight": [1],
+  "learning_rate": [.04, .075, .1],
+  "n_estimators": [1000],
+  "booster": ["gbtree"],
+  "gamma": [0, 5, 15, 25, 50],
+  "subsample": [0.3, 0.6, 0.8],
+  "colsample_bytree": [0.5, 0.7, 0.8],
+  "colsample_bylevel": [0.5, 0.7,],
+  "reg_alpha": [1, 10, 33],
+  "reg_lambda": [1, 3, 10],
+  }
+
+  # RandomizedSearch Approach (Faster runtime and better predictions made)
+  k = KFold(n_splits = 10, shuffle=True, random_state=10)
+  regr = RandomizedSearchCV(xgb.XGBRegressor(random_state=10), parameters, cv=k, \
+                          n_jobs=4, scoring="neg_mean_squared_error", random_state=10, n_iter=10)
+
+
+  # Fit trained data on best model/parameters from the RandomizedSearchCV
+  regr.fit(x, Y)
+  xgb_model = xgb.XGBRegressor(**regr.best_params_)
+
+
+  X_train, X_test, y_train, y_test = train_test_split(x, Y, train_size=0.9, random_state=1234)
+
+
+  xgb_model.fit(X_train, y_train)
+  y_pred = pd.DataFrame(xgb_model.predict(X_test))
+  xgb_mse = mean_squared_error(y_test, y_pred)
+  score = xgb_model.score(X_test, y_test)
+
+
+  print("XGBoost Score=", score)
+  print("XGBoost Train/Test MSE =", xgb_mse)
+  print("Coefficient of determination R^2 (Train/Test)", r2_score(y_test, y_pred))
+},
+```
+
+
+
+
 We also used a randomized search cross validation pre-built function from the sklearn module. It tries random combinations of a range of values (we defined the number of iterations to 10). It is good at testing a wide range of values and normally it reaches a very good combination very fast (recommended for big datasets with parameter tuning). After feeding the variables into the regression model we observe that the best model after training/testing/tuning on the dataset for XGradient Boosting, was an MSE of ﻿2279.02 with an R2 of 0 ﻿86.38% (With respect to the entire dataset). The high value of R2 shows that XGradient Boosting is suitable for large datasets as it creates a large ensemble of trees, with each tree correcting on the error of the previous, thus making the model accurate. 
 
 
@@ -143,7 +196,7 @@ Given a validation set we were able to re-estimate and fit our models on the ori
 |**Test Set**|<p>MSE = ﻿ 7312.977</p><p></p>|<p>MSE = ﻿9191.795</p><p></p>|<p>MSE = ﻿7647.505</p><p></p>|<p>MSE = 2279.02</p><p>R2 = ﻿86.38%</p>|
 |**Validation Set**||||<p>MSE = ﻿2499.51</p><p>R2 = 84.02%</p>|
 
-*Table 1 - MSE and R2 for the best model
+Table 1 - MSE and R2 for the best model
 
 ## Conclusion
 
