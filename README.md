@@ -11,21 +11,19 @@ Prepared by: Sawmon Abossedgh
 
 ## Contents
 
-1. Introduction
-1. Data Preparation and Description Using SQLite
-1. Reading and Visualizing the Dataset on Python 
-1. Feature Engineering
-1. Train and Test Split w/Cross Validation
-1. Regression Model Implementations
-   * Liner Regression – OLS
-   * Lasso/Ridge
-   * Gradient Boosting XR
-1. Validation
-1. Visualizations / Conclusions
-1. Citations
-
-
-
+- [Introduction](#introduction)
+- [Data Preparation and Description Using SQLite](#data-preparation-and-description-using-sqlite)
+- [Reading and Visualizing the Dataset on Python](#reading-and-visualizing-the-dataset-on-python)
+- [Feature Engineering](#feature-engineering)
+- [Train and Test Split with Cross Validation](#train-and-test-split-with-cross-validation)
+- [Regression Model Implementations](#regression-model-implementations)
+  - [Liner Regression with OLS](#a-ordinary-least-squares)
+  - [Lasso](#b-lasso)
+  - [Ridge](#c-ridge)
+  - [Gradient Boosting XR](#d-gradient-boosting-xr)
+- [Validation](#validation-of-best-model)
+- [Conclusion](#conclusion)
+- [Citations](#citations)
 
 
 
@@ -83,7 +81,7 @@ Prepared by: Sawmon Abossedgh
 <p>We used ratio calculated variables strictly to avoid the multicollinearity problem when used in mainly linear regression models. A pre-defined method function in python called Variance Inflation Factor can also be used to determine the strength of the correlation between various independent models. If our variables from our features are less than a VIF score of 10, it can be used.
 
 
-## Train and Test Split w/ K-Folds Cross Validation
+## Train and Test Split with Cross Validation
 
 <p>For supervised machine learning problems, there are some tools used to prevent/minimize overfitting. For example, with linear regression, we usually fit the model on a training set to make predictions for the test set (the data that wasn’t trained). To further break this down, I split the data into two subsets: training and testing data to help make predictions on the test set. I do this using the “Scikit-Learn Library” and I use a 90/10 split meaning 90% of the data is used to train to make predictions for our test set, the 10% section. The only problem from only using the train-test split is if it wasn’t random and our subsets have certain data that the other subsets don’t. This could lead to overfitting, so I solve this problem by including k-folds cross validation. As shown in figure 3 below, it basically splits the data into k different folds and trains on k – 1 of those folds holding the last fold for test data. It then averages the model against all the folds and then creates a final-best model. 
 
@@ -149,7 +147,7 @@ Prepared by: Sawmon Abossedgh
 
 
 
-### A. Ordinary Least Squares – Linear
+### A. Ordinary Least Squares
 
 <p>From the scikit-learn website, we can verify OLS is used as the regression method. It also states the function definition as follows: Linear Regression fits a linear model with coefficients w = (w1, …, wp) to minimize the residual sum of squares between the observed targets in the dataset, and the targets predicted by the linear approximation.
 
@@ -170,7 +168,7 @@ Prepared by: Sawmon Abossedgh
 <p>Using α = 10 and “﻿neg\_mean\_squared\_error” as our scoring, we observe that the best model for Ridge is slightly worse than our linear regression model, with an MSE of ﻿7647.505 and variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'N\_stateplane', 'cbdDist\_to\_landBuilding'
 
 
-## D. XGradient Boosting
+## D. Gradient Boosting XR
 
 <p>XGradient Boosting is a machine learning regression algorithm that is a method of creating an ensemble of individual models and is used for regression and classification purposes. In order to understand this method, I read an article by Arthur Mello called XGBoost: theory and practice. An understanding of decision trees is necessary. Decision trees are simply a way of visualizing outcomes in a branching structure. A decision tree consists of a root node, it represents the population that is being analyzed and is further branched out into the various features known as the decision nodes, which split into further nodes. Additionally, the leaf node is a sub-node that does not split into further nodes. XGradient boosting is a technique that creates an ensemble of decision trees, with each decision tree improving on the performance of the previous one. It is known to combine the weak learners into stronger ones, meaning that each new tree that is built improves on the error of the previous one. XGradient Boosting also uses hyperparameter tuning which chooses a set of optimal parameters for learning algorithms and provides us with high performance models. 
 
