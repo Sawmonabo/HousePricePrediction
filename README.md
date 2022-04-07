@@ -34,7 +34,7 @@ Prepared by: Sawmon Abossedgh
 
 ## Data Preparation and Description Using SQLite
 
-<p>We are given files with the names prices.csv, characteristics.csv, and locations.csv. The files contain information on 10,000 residential property sales in Orange County, Florida. The first file contains a property identifier (pid), the most recent sales price of the property measured in thousands of dollars (price), and the year that the sale occurred (year). The second file contains a property identifier (pid), property-type code (tid), and numerous property characteristics. The property characteristics include the square feet of heated area (home\_size), the square feet of the parcel of land (parcel\_size), the number of bedrooms (beds), the age of the home in years (age), and an indicator variable (pool) that takes a value of 1 if the property has a pool and a value of 0 if it does not. The third file contains a property-type code (tid), a variable indicating the distance in meters to the central business district in downtown Orlando (cbd\_dist), and coordinates identifying the geographic location of each property (x\_coord and y\_coord). 
+<p>I was given files with the names prices.csv, characteristics.csv, and locations.csv. The files contain information on 10,000 residential property sales in Orange County, Florida. The first file contains a property identifier (pid), the most recent sales price of the property measured in thousands of dollars (price), and the year that the sale occurred (year). The second file contains a property identifier (pid), property-type code (tid), and numerous property characteristics. The property characteristics include the square feet of heated area (home\_size), the square feet of the parcel of land (parcel\_size), the number of bedrooms (beds), the age of the home in years (age), and an indicator variable (pool) that takes a value of 1 if the property has a pool and a value of 0 if it does not. The third file contains a property-type code (tid), a variable indicating the distance in meters to the central business district in downtown Orlando (cbd\_dist), and coordinates identifying the geographic location of each property (x\_coord and y\_coord). 
 
 <p>In SQLite, I created a database called Sales.db. Next, I made three tables within the database called Prices, Characteristics, and Locations and populated the tables with the data contained in the prices.csv, characteristics.csv, and locations.csv files. Once all data is uploaded into SQLite, I then joined the tables and exported a single file called sales.csv that contains the sale prices and dates from the Prices table, the property characteristics from the Characteristics table, and the location variables from the Locations table. 
 
@@ -46,7 +46,7 @@ Prepared by: Sawmon Abossedgh
 - dataset.info() - visualized our datatypes from each of the variables from our dataset. Containing 9999 entries, 10 columns, and data types of integers and floats.
 - dataset.describe() – gave us descriptive statistics summary on each variable from our dataset containing statistical measures of the count, mean, std, min, max, and percentiles of 25-50-75%.
 
-<p>With the visual packages python provides we can use histograms, a correlation matrix, and scatter plots to see correlation between variables. More specifically I wanted to see how our feature/predictor variables are correlated with our target variable, price. For instance, in Figure 1 below, we can see how all the predictor variables are shaped with respect to price. In Figure 2 below, we can see the correlation represented as a value between (+/-) 1, where positive one shows the highest positive correlation, negative one shows the highest negative correlation, and zero representing no correlation.
+<p>With the visual packages python provides I can use histograms, a correlation matrix, and scatter plots to see correlation between variables. More specifically I wanted to see how our feature/predictor variables are correlated with our target variable, price. For instance, in Figure 1 below, I can see how all the predictor variables are shaped with respect to price. In Figure 2 below, I can see the correlation represented as a value between (+/-) 1, where positive one shows the highest positive correlation, negative one shows the highest negative correlation, and zero representing no correlation.
 
 
 
@@ -59,14 +59,14 @@ Prepared by: Sawmon Abossedgh
 | *Figure 2 - Correlation Heat Map* |
 
 
-<p>From our heat map in Figure 2, we can see there are many correlated variables. We notice that variables ‘home\_size’ to ‘beds’ have the highest positive correlation, and ‘age’ to ‘cbd\_dist’ have the highest negative correlation which from a practical standpoint makes sense. Most importantly, we need to see the correlation between the predictor variables and our target, price. Looking at the first column of our heat map in Figure 2, we see ‘home\_size’ being the highest positive correlation.
+<p>From our heat map in Figure 2, I can see there are many correlated variables. I notice that variables ‘home\_size’ to ‘beds’ have the highest positive correlation, and ‘age’ to ‘cbd\_dist’ have the highest negative correlation which from a practical standpoint makes sense. Most importantly, I need to see the correlation between the predictor variables and our target, price. Looking at the first column of our heat map in Figure 2, I see ‘home\_size’ being the highest positive correlation.
 
 ## Feature Engineering
 
 
-<p>Before I started making new variables I reverse engineered the variables ‘(x/y)\_coord’ and learned that they are Florida East state plane measures in US Survey units. This isn’t a common measure for location, so we converted them into longitude and latitude. From there, we were able to use a function using our latitude and longitude that gave us data on each home. We were then able to obtain the address and zip code of each individual house from the dataset. There were 29 rows that the function didn’t return a zip code for, so we removed those columns completely to stay consistent with the rest of the data rows. This is all shown in python script – house\_features.py.
+<p>Before I started making new variables I reverse engineered the variables ‘(x/y)\_coord’ and learned that they are Florida East state plane measures in US Survey units. This isn’t a common measure for location, so I converted them into longitude and latitude. From there, I was able to use a function using our latitude and longitude that gave us data on each home. I was then able to obtain the address and zip code of each individual house from the dataset. There were 29 rows that the function didn’t return a zip code for, so I removed those columns completely to stay consistent with the rest of the data rows. This is all shown in python script – house\_features.py.
 
-<p>Now, after our previous section we learned about some features with high positive correlation we can use to engineer a new variable to help predict price.  The variables are shown below:
+<p>Now, after our previous section I learned about some features with high positive correlation I can use to engineer a new variable to help predict price.  The variables are shown below:
 
 
 
@@ -78,12 +78,12 @@ Prepared by: Sawmon Abossedgh
 },
 ```
 
-<p>We used ratio calculated variables strictly to avoid the multicollinearity problem when used in mainly linear regression models. A pre-defined method function in python called Variance Inflation Factor can also be used to determine the strength of the correlation between various independent models. If our variables from our features are less than a VIF score of 10, it can be used.
+<p>I used ratio calculated variables strictly to avoid the multicollinearity problem when used in mainly linear regression models. A pre-defined method function in python called Variance Inflation Factor can also be used to determine the strength of the correlation between various independent models. If our variables from our features are less than a VIF score of 10, it can be used.
 
 
 ## Train and Test Split with Cross Validation
 
-<p>For supervised machine learning problems, there are some tools used to prevent/minimize overfitting. For example, with linear regression, we usually fit the model on a training set to make predictions for the test set (the data that wasn’t trained). To further break this down, I split the data into two subsets: training and testing data to help make predictions on the test set. I do this using the “Scikit-Learn Library” and I use a 90/10 split meaning 90% of the data is used to train to make predictions for our test set, the 10% section. The only problem from only using the train-test split is if it wasn’t random and our subsets have certain data that the other subsets don’t. This could lead to overfitting, so I solve this problem by including k-folds cross validation. As shown in figure 3 below, it basically splits the data into k different folds and trains on k – 1 of those folds holding the last fold for test data. It then averages the model against all the folds and then creates a final-best model. 
+<p>For supervised machine learning problems, there are some tools used to prevent/minimize overfitting. For example, with linear regression, I usually fit the model on a training set to make predictions for the test set (the data that wasn’t trained). To further break this down, I split the data into two subsets: training and testing data to help make predictions on the test set. I do this using the “Scikit-Learn Library” and I use a 90/10 split meaning 90% of the data is used to train to make predictions for our test set, the 10% section. The only problem from only using the train-test split is if it wasn’t random and our subsets have certain data that the other subsets don’t. This could lead to overfitting, so I solve this problem by including k-folds cross validation. As shown in figure 3 below, it basically splits the data into k different folds and trains on k – 1 of those folds holding the last fold for test data. It then averages the model against all the folds and then creates a final-best model. 
 
 
 
@@ -95,7 +95,7 @@ Prepared by: Sawmon Abossedgh
 ## Regression Model Implementations
 
 
-<p>For only our linear regression models I used three different methods including scaling, a combinations function, and a polynomial features function. I scaled the data to standardize the variables for polynomial or interaction terms used, to avoid multicollinearity. A combination’s function was implemented to try all possible combinations of feature variables to find the best and lowest MSE score. To find the best model for regression I used sklearn’s “Polynomial Features” function which creates an interaction between the feature variables as well as raises each variable to the selected power, in my case 3. We set our Polynomial function to raise the variables to the 2nd with respect to the combinations function.
+<p>For only our linear regression models I used three different methods including scaling, a combinations function, and a polynomial features function. I scaled the data to standardize the variables for polynomial or interaction terms used, to avoid multicollinearity. A combination’s function was implemented to try all possible combinations of feature variables to find the best and lowest MSE score. To find the best model for regression I used sklearn’s “Polynomial Features” function which creates an interaction between the feature variables as well as raises each variable to the selected power, in my case 3. I set the Polynomial function to raise the variables to the 2nd with respect to the combinations function.
 
 ```js
 {
@@ -149,7 +149,7 @@ Prepared by: Sawmon Abossedgh
 
 ### A. Ordinary Least Squares
 
-<p>From the scikit-learn website, we can verify OLS is used as the regression method. It also states the function definition as follows: Linear Regression fits a linear model with coefficients w = (w1, …, wp) to minimize the residual sum of squares between the observed targets in the dataset, and the targets predicted by the linear approximation.
+<p>From the scikit-learn website, I can verify OLS is used as the regression method. It also states the function definition as follows: Linear Regression fits a linear model with coefficients w = (w1, …, wp) to minimize the residual sum of squares between the observed targets in the dataset, and the targets predicted by the linear approximation.
 
 <p>Using “﻿neg\_mean\_squared\_error” as our scoring, the model with the lowest MSE consisted of the variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'longitutde', 'cbdDist\_to\_landBuilding'. The test mean squared error for our best linear regression model was ﻿7312.977.
 
@@ -158,14 +158,14 @@ Prepared by: Sawmon Abossedgh
 
 <p>Least Absolute Shrinkage and Selection Operator (LASSO) is a machine learning regression algorithm that is quite like linear regression except it does have the capabilities to shrink the coefficients to zero to avoid overfitting. From the scikit-learn website, Lasso’s ability to regularize and shrink the coefficients allows it to be used for variable selection which in turn improves the prediction accuracy. To control for shrinkage applied to the coefficients to get a more parsimonious model, Lasso uses a tuning parameter, λ.  If λ=0, it is equal to the linear regression model, and as λ increases, the coefficients shrink and the ones that are equal zero are eliminated. 
 
-<p>Using λ = 0.15 and “﻿neg\_mean\_squared\_error” as our scoring, we observe that the best model for Lasso is worse than our linear regression model, with an MSE of ﻿9191.795 and variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'lattitude', 'cbdDist\_to\_landBuilding'.  The lambda value was set close to zero which is why the two models look similar, showing a lack of shrinkage possibly. 
+<p>Using λ = 0.15 and “﻿neg\_mean\_squared\_error” as our scoring, I observe that the best model for Lasso is worse than our linear regression model, with an MSE of ﻿9191.795 and variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'lattitude', 'cbdDist\_to\_landBuilding'.  The lambda value was set close to zero which is why the two models look similar, showing a lack of shrinkage possibly. 
 
 
 ### C. Ridge
 
 <p>Ridge regression addresses some of the problems of Ordinary Least Squares by imposing a penalty on the size of the coefficients. From the scikit-learn website, the ridge coefficients minimize a penalized residual sum of squares, and the complexity parameter (α >= 0) controls the amount of shrinkage. The larger the value of the complexity parameter, the greater the amount of shrinkage and thus the coefficients become more robust to collinearity.
 
-<p>Using α = 10 and “﻿neg\_mean\_squared\_error” as our scoring, we observe that the best model for Ridge is slightly worse than our linear regression model, with an MSE of ﻿7647.505 and variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'N\_stateplane', 'cbdDist\_to\_landBuilding'
+<p>Using α = 10 and “﻿neg\_mean\_squared\_error” as our scoring, I observe that the best model for Ridge is slightly worse than our linear regression model, with an MSE of ﻿7647.505 and variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'N\_stateplane', 'cbdDist\_to\_landBuilding'
 
 
 ## D. Gradient Boosting XR
@@ -182,7 +182,7 @@ Parameters used and their meanings: (https://xgboost.readthedocs.io/en/stable/pa
 |<p>colsample\_bytree, </p><p>colsample\_bylevel, </p><p>colsample\_bynode [default=1]</p><p></p>|<p>All colsample\_by\* parameters have a range of (0, 1], the default value of 1, and specify the fraction of columns to be subsampled.</p><p></p><p>colsample\_bytree is the subsample ratio of columns when constructing each tree. Subsampling occurs once for every tree constructed.</p><p></p><p>colsample\_bylevel is the subsample ratio of columns for each level</p>|
 |lambda [default=1, alias: reg\_lambda]|L2 regularization term on weights. Increasing this value will make model more conservative.|
 |alpha [default=0, alias: reg\_alpha]|L1 regularization term on weights. Increasing this value will make model more conservative.|
-|learning\_rate [default=0.3]|Step size shrinkage used in update to prevents overfitting. After each boosting step, we can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.|
+|learning\_rate [default=0.3]|Step size shrinkage used in update to prevents overfitting. After each boosting step, I can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.|
 |gamma [default=0, alias: min\_split\_loss]|Minimum loss reduction required to make a further partition on a leaf node of the tree. The larger gamma is, the more conservative the algorithm will be.|
 
 
@@ -228,14 +228,14 @@ Parameters used and their meanings: (https://xgboost.readthedocs.io/en/stable/pa
 
 
 
-We also used a randomized search cross validation pre-built function from the sklearn module. It tries random combinations of a range of values (we defined the number of iterations to 10). It is good at testing a wide range of values and normally it reaches a very good combination very fast (recommended for big datasets with parameter tuning). After feeding the variables into the regression model we observe that the best model after training/testing/tuning on the dataset for XGradient Boosting, was an MSE of ﻿2279.02 with an R2 of 0 ﻿86.38% (With respect to the entire dataset). The high value of R2 shows that XGradient Boosting is suitable for large datasets as it creates a large ensemble of trees, with each tree correcting on the error of the previous, thus making the model accurate. 
+I also used a randomized search cross validation pre-built function from the sklearn module. It tries random combinations of a range of values (I defined the number of iterations to 10). It is good at testing a wide range of values and normally it reaches a very good combination very fast (recommended for big datasets with parameter tuning). After feeding the variables into the regression model I observe that the best model after training/testing/tuning on the dataset for XGradient Boosting, was an MSE of ﻿2279.02 with an R2 of ﻿86.38% (With respect to the entire dataset). The high value of R2 shows that XGradient Boosting is suitable for large datasets as it creates a large ensemble of trees, with each tree correcting on the error of the previous, thus making the model accurate. 
 
 
 
 
 ## Validation of Best Model
 
-Given a validation set we were able to re-estimate and fit the best model on the original data set and obtain predictions for the validation set.
+Given a validation set I was able to re-estimate and fit the best model on the original data set and obtain predictions for the validation set.
 
 ||**Linear - OLS Regression**|**Lasso Regression**|**Ridge Regression**|**XGBoost**|
 | :-: | :-: | :-: | :-: | :-: |
