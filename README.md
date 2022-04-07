@@ -126,7 +126,7 @@ Prepared by: Sawmon Abossedgh
   # Initalize the k-fold cross validation.
   k = KFold(n_splits = 10, shuffle=True, random_state=10)
 
-  # Runtime is around 30mins
+  # Loop through every possbile combination of features and test for lowest MSE value.
   for n in range(0, len(x_combos)):
       combo_list = list(x_combos[n])
       x2 = scaled_Dataset[combo_list]
@@ -185,6 +185,8 @@ Parameters used and their meanings: (https://xgboost.readthedocs.io/en/stable/pa
 |learning\_rate [default=0.3]|Step size shrinkage used in update to prevents overfitting. After each boosting step, I can directly get the weights of new features, and eta shrinks the feature weights to make the boosting process more conservative.|
 |gamma [default=0, alias: min\_split\_loss]|Minimum loss reduction required to make a further partition on a leaf node of the tree. The larger gamma is, the more conservative the algorithm will be.|
 
+I also used a randomized search cross validation pre-built function from the sklearn module. It tries random combinations of a range of values (I defined the number of iterations to 10). It is good at testing a wide range of values and normally it reaches a very good combination very fast (recommended for big datasets with parameter tuning).
+
 
 ```js
 {
@@ -228,7 +230,7 @@ Parameters used and their meanings: (https://xgboost.readthedocs.io/en/stable/pa
 
 
 
-I also used a randomized search cross validation pre-built function from the sklearn module. It tries random combinations of a range of values (I defined the number of iterations to 10). It is good at testing a wide range of values and normally it reaches a very good combination very fast (recommended for big datasets with parameter tuning). After feeding the variables into the regression model I observe that the best model after training/testing/tuning on the dataset for XGradient Boosting, was an MSE of ﻿2279.02 with an R2 of ﻿86.38% (With respect to the entire dataset). The high value of R2 shows that XGradient Boosting is suitable for large datasets as it creates a large ensemble of trees, with each tree correcting on the error of the previous, thus making the model accurate. 
+ After feeding the variables into the regression model I observe that the best model after training/testing/tuning on the dataset for XGradient Boosting, was an MSE of ﻿2279.02 with an R2 of ﻿86.38% (With respect to the entire dataset). The high value of R2 shows that XGradient Boosting is suitable for large datasets as it creates a large ensemble of trees, with each tree correcting on the error of the previous, thus making the model accurate. 
 
 
 
