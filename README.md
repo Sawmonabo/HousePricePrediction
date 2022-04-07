@@ -188,7 +188,6 @@ Parameters used and their meanings: (https://xgboost.readthedocs.io/en/stable/pa
 
 ```js
 {
-
   parameters = \
   {
   "max_depth": [4, 5, 6],
@@ -223,10 +222,6 @@ Parameters used and their meanings: (https://xgboost.readthedocs.io/en/stable/pa
   xgb_mse = mean_squared_error(y_test, y_pred)
   score = xgb_model.score(X_test, y_test)
 
-
-  print("XGBoost Score=", score)
-  print("XGBoost Train/Test MSE =", xgb_mse)
-  print("Coefficient of determination R^2 (Train/Test)", r2_score(y_test, y_pred))
 },
 ```
 
