@@ -168,7 +168,7 @@ Prepared by: Sawmon Abossedgh
 <p>Using α = 10 and “﻿neg\_mean\_squared\_error” as our scoring, I observe that the best model for Ridge is slightly worse than our linear regression model, with an MSE of ﻿7647.505 and variables ﻿'home\_size', 'year', 'cbd\_dist', 'E\_stateplane', 'N\_stateplane', 'cbdDist\_to\_landBuilding'
 
 
-## D. Gradient Boosting XR
+### D. Gradient Boosting XR
 
 <p>XGradient Boosting is a machine learning regression algorithm that is a method of creating an ensemble of individual models and is used for regression and classification purposes. In order to understand this method, I read an article by Arthur Mello called XGBoost: theory and practice. An understanding of decision trees is necessary. Decision trees are simply a way of visualizing outcomes in a branching structure. A decision tree consists of a root node. It represents the population that is being analyzed and is further branched out into the various features known as the decision nodes, which split into further nodes. Additionally, the leaf node is a sub-node that does not split into further nodes. XGradient boosting is a technique that creates an ensemble of decision trees, with each decision tree improving on the performance of the previous one. It is known to combine the weak learners into stronger ones, meaning that each new tree that is built improves on the error of the previous one. XGradient Boosting also uses hyperparameter tuning which chooses a set of optimal parameters for learning algorithms and provides us with high performance models. 
 
